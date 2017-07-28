@@ -57,7 +57,7 @@ Follow these instructions to get the slideshow set up and working on your Raspbe
     ```
     sudo pip install Pillow
     ```
-    You may get error messages about missing libraries for other image formats, but right now we're only concerned that the JPEG library in step 6 was installed.
+    You may get error messages about missing libraries for other image formats, but right now we're only concerned that the JPEG library in step 7 was installed.
 
 9. **Create a directory for the slideshow, and copy the files from this repo into it**
 
