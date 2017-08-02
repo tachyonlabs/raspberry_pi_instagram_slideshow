@@ -1,17 +1,21 @@
 # Raspberry Pi Instagram Slideshow
 
-I'm a volunteer at the [Idea Fab Labs](https://santacruz.ideafablabs.com/) maker/hacker/artspace here in Santa Cruz, and I was asked to set up a Raspberry Pi with a large TV by the front entrance so that all you had to do was plug it in and it would start running a slideshow of [Idea Fab Labs' Instagram feed](https://www.instagram.com/ideafablabs/). I wrote it in Python (Python 2, but Python 3 should be much the same) using the Tkinter GUI interface, on a Raspberry Pi 2 Model B running Raspbian Wheezy.
+I'm a volunteer at the [Idea Fab Labs](https://santacruz.ideafablabs.com/) maker/hacker/artspace here in Santa Cruz, and I was asked to set up a Raspberry Pi with a large TV by the front entrance so that all you had to do was plug it in and it would start running a slideshow of [Idea Fab Labs' Instagram feed](https://www.instagram.com/ideafablabs/). I wrote the slideshow program in Python (Python 2, but Python 3 should be much the same) using the Tkinter GUI interface, on a Raspberry Pi 2 Model B running Raspbian Wheezy.
 
-Because (at least as of July 2017) the Instagram API in [Sandbox Mode](https://www.instagram.com/developer/sandbox/) only gets the 20 most recent photos from an Instagram account, and in the interest of both reducing bandwidth and being able to run the slideshow even when your internet connection is down, once an hour the program checks Instagram to see if any new photos have been posted to the account, and if so, downloads them to its `instagram_photos` directory. If you like you can also copy other jpg files to the directory and they will also be included in the slideshow -- for that matter I used the [InstaG Downloader Chrome Extension](https://chrome.google.com/webstore/detail/instag-downloader/jnkdcmgmnegofdddphijckfagibepdlb?hl=en) to download all the photos from their Instagram feed that were older than the 20 most recent, so they would be in the `instagram_photos` directory too.
+If you'd like to do something similar with your own Instagram feed, the instructions below will walk you through getting the slideshow set up on your Raspberry Pi.
 
-A future version of the program will add features like displaying captions also, and being more configurable in terms of the order it displays photos in and how long to display each photo.
+Because (at least as of August 2017) the Instagram API in [Sandbox Mode](https://www.instagram.com/developer/sandbox/) only gets the 20 most recent photos from an Instagram account, and in the interest of both reducing bandwidth and being able to run the slideshow even when your internet connection is down, once an hour the program checks Instagram to see if any new photos have been posted to the account, and if so, downloads them to its `instagram_photos` directory. If you like you can also copy other jpg files to the directory and they will also be included in the slideshow -- for that matter I used the [InstaG Downloader Chrome Extension](https://chrome.google.com/webstore/detail/instag-downloader/jnkdcmgmnegofdddphijckfagibepdlb?hl=en) to download all the photos from the Idea Fab Labs Instagram feed that were older than the 20 most recent, so they would be in the `instagram_photos` directory too.
+
+You can configure whether the slideshow displays photos in either random order or the order they are in the `instagram_photos` directory (the default is random), and/or configure how long the slideshow displays each photo before moving on to the next (the default is 15 seconds), by pressing `Esc` to exit fullscreen mode, and then selecting `Preferences ...` from the `Edit` pull-down menu. After making configuration changes, click `OK`, and then return to fullscreen display by either pressing `Esc` again or selecting `Enter Fullscreen` from the `View` pulldown menu.
+
+More features later ...
 
 ## Getting the slideshow set up on your Raspberry Pi
 Follow these instructions to get the slideshow set up and working on your Raspberry Pi:
 
 1. **Set your Raspberry Pi to autologin into the GUI if it doesn't already**
 
-    The slideshow runs in the Raspberry Pi GUI, so follow these instructions to set your Raspberry Pi to autologin to the Gui if it isn't already doing it: https://raspberrypi.stackexchange.com/questions/7261/how-to-set-my-raspberry-pi-to-boot-into-the-gui
+    The slideshow runs in the Raspberry Pi GUI, so follow these instructions to set your Raspberry Pi to autologin to the GUI if it isn't already doing it: https://raspberrypi.stackexchange.com/questions/7261/how-to-set-my-raspberry-pi-to-boot-into-the-gui
 
 2. **Configure your Raspberry Pi to connect to your Wifi if you haven't done so already**
 
@@ -61,7 +65,7 @@ Follow these instructions to get the slideshow set up and working on your Raspbe
 
 9. **Create a directory for the slideshow, and copy the files from this repo into it**
 
-    Create a directory `raspberry_pi_instagram_slideshow` in the `/home/pi/` directory, and copy the files `instagram_slideshow.py` and `instagram_slideshow.bat` from this repo into it. (Or if you prefer you can use a different slideshow directory name and/or location, adjusting its name/location in subsequent steps accordingly.)
+    Create a directory `raspberry_pi_instagram_slideshow` in the `/home/pi/` directory, and copy the files `instagram_slideshow.py`, `tkSimpleDialog.py`, and `instagram_slideshow.bat` from this repo into it. (Or if you prefer you can use a different slideshow directory name and/or location, adjusting its name/location in subsequent steps accordingly.)
 
 10. **Make `instagram_slideshow.bat` executable.**
 
@@ -104,4 +108,8 @@ The first time you run the slideshow, it will create an `instagram_photos` subdi
 
 If instead of showing messages about downloading photos, it immediately blanks the screen, this means that it was not able to download any photos to display due to not having a connection to the Internet (if there's no Internet connection the slideshow will just display stored photos, but to get stored photos in the first place you need to be connected to the Internet) or there being a problem with your Instagram access token. To see what's going on, use Alt-Tab to switch to the terminal window and see the status messages.
 
-If at any point you want to close the slideshow, do an Alt-Tab to switch to the terminal window, and do a Ctrl-C to close the slideshow but leave the terminal window open, or just close the terminal window to close both of them.
+If at any point you want to close the slideshow, here are two ways to do it:
+
+* Do an `Alt-Tab` to switch to the terminal window, and then do a `Ctrl-C` to close the slideshow but leave the terminal window open, or just close the terminal window to close both of them.
+
+* Press `Esc` to get out of fullscreen mode, and then you can either (1) select `Exit` from the `File` pull-down menu, (2) click the `X` close button at the top-right of the slidehow window, or (3) do a `Ctrl-C` from the terminal window or close the terminal window.
