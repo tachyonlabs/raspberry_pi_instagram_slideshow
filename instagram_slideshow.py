@@ -14,15 +14,16 @@ from tkSimpleDialog import Dialog
 class SlideshowPreferencesDialog(Dialog):
     def body(self, parent):
         # set up the Edit Preferences dialog box labels and input widgets
-        display_order_label = tk.Label(parent, text="Photo display order:").grid(row=0, sticky="W", pady=5)
+        display_order_label = tk.Label(parent, text="Photo display order:").grid(row=0, sticky="W")
         self.display_order = tk.StringVar()
-        self.display_order_random = tk.Radiobutton(parent, text="Random", variable=self.display_order, value="random").grid(row=0, column=1)
-        self.display_order_directory = tk.Radiobutton(parent, text="Directory", variable=self.display_order, value="directory").grid(row=0, column=2)
+        self.display_order_random = tk.Radiobutton(parent, text="Random order", variable=self.display_order, value="random").grid(row=0, column=1, sticky="W")
+        self.display_order_directory = tk.Radiobutton(parent, text="Directory order", variable=self.display_order, value="directory").grid(row=1, column=1, sticky="W")
+        self.display_order_sorted = tk.Radiobutton(parent, text="Sorted lexicographically", variable=self.display_order, value="sorted").grid(row=2, column=1, sticky="W")
         self.display_order.set(self.parent.PHOTO_DISPLAY_ORDER)
 
-        duration_label = tk.Label(parent, text="Photo duration in seconds:").grid(row=1, sticky="W", pady=5)
+        duration_label = tk.Label(parent, text="Photo duration in seconds: ").grid(row=3, sticky="W", pady=7)
         self.duration = tk.StringVar()
-        self.duration_spinbox = tk.Spinbox(parent, from_=5, to=120, increment=5, textvariable=self.duration).grid(row=1, column=1, columnspan=2)
+        self.duration_spinbox = tk.Spinbox(parent, from_=5, to=120, increment=5, textvariable=self.duration).grid(row=3, column=1)
         self.duration.set(self.parent.SECONDS_BEFORE_CHANGING_PHOTO)
 
     def apply(self):
@@ -40,7 +41,7 @@ class InstagramSlideshow:
         self.window = tk.Tk()
 
         # set constants
-        self.INSTAGRAM_ACCESS_TOKEN = "put your access token here"
+        self.INSTAGRAM_ACCESS_TOKEN = "1783065740.be45496.7146bb8e311d41f3851ccc37905311a7"
         self.MOST_RECENT_PHOTOS_URL = "https://api.instagram.com/v1/users/self/media/recent/?access_token={}".format(self.INSTAGRAM_ACCESS_TOKEN)
         self.LOCAL_PHOTO_DIRECTORY_PATH = "./instagram_photos/"
         self.INI_FILE = "./instagram_slideshow.ini"
@@ -49,6 +50,7 @@ class InstagramSlideshow:
         self.window.SECONDS_BEFORE_CHANGING_PHOTO = 15
         self.window.PHOTO_DISPLAY_ORDER_DIRECTORY = "directory"
         self.window.PHOTO_DISPLAY_ORDER_RANDOM = "random"
+        self.window.PHOTO_DISPLAY_ORDER_SORTED = "sorted"
         self.window.PHOTO_DISPLAY_ORDER = self.window.PHOTO_DISPLAY_ORDER_RANDOM
 
         # set up Tkinter for fullscreen display of photos
@@ -109,6 +111,7 @@ class InstagramSlideshow:
         SlideshowPreferencesDialog(self.window, "Edit Preferences")
         # and if the user clicked OK and had changed any preferences
         if self.window.preferences_changed:
+            self.photos = self.get_photo_filenames()
             self.update_ini_file()
 
     def get_preferences_from_ini_file(self):
@@ -179,6 +182,10 @@ class InstagramSlideshow:
     def get_photo_filenames(self):
         # get all the jpg filenames in the instagram_photos subdirectory
         photo_filenames = [file for file in os.listdir(self.LOCAL_PHOTO_DIRECTORY_PATH) if file.endswith(".jpg")]
+
+        if self.window.PHOTO_DISPLAY_ORDER == self.window.PHOTO_DISPLAY_ORDER_SORTED:
+            photo_filenames.sort()
+
         if not photo_filenames:
             print "No stored photos found."
 
@@ -188,7 +195,7 @@ class InstagramSlideshow:
         if self.photos:
             # if there are any photos in the instagream_photos subdirectory,
             # open the next image and resize it to fit the screen
-            if self.window.PHOTO_DISPLAY_ORDER == self.window.PHOTO_DISPLAY_ORDER_DIRECTORY:
+            if self.window.PHOTO_DISPLAY_ORDER in [self.window.PHOTO_DISPLAY_ORDER_DIRECTORY, self.window.PHOTO_DISPLAY_ORDER_SORTED]:
                 self.current_image_index = (self.current_image_index + 1) % len(self.photos)
             elif self.window.PHOTO_DISPLAY_ORDER == self.window.PHOTO_DISPLAY_ORDER_RANDOM:
                 self.current_image_index = random.randint(0, len(self.photos) - 1)
