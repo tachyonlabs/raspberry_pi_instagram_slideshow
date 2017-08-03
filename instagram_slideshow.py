@@ -41,7 +41,7 @@ class InstagramSlideshow:
         self.window = tk.Tk()
 
         # set constants
-        self.INSTAGRAM_ACCESS_TOKEN = "1783065740.be45496.7146bb8e311d41f3851ccc37905311a7"
+        self.INSTAGRAM_ACCESS_TOKEN = "put your access token here"
         self.MOST_RECENT_PHOTOS_URL = "https://api.instagram.com/v1/users/self/media/recent/?access_token={}".format(self.INSTAGRAM_ACCESS_TOKEN)
         self.LOCAL_PHOTO_DIRECTORY_PATH = "./instagram_photos/"
         self.INI_FILE = "./instagram_slideshow.ini"
