@@ -8,7 +8,7 @@ Because (at least as of September 2017) the Instagram API in [Sandbox Mode](http
 
 You can configure whether the slideshow displays photos in random order, the order they are in the `instagram_photos` directory, or sorted lexicographic order (the default is random), and/or configure how long the slideshow displays each photo before moving on to the next (the default is 15 seconds), by pressing `Esc` to exit fullscreen mode, and then selecting `Preferences ...` from the `Edit` pull-down menu. After making configuration changes, click `OK`, and then return to fullscreen display by either pressing `Esc` again or selecting `Enter Fullscreen` from the `View` pulldown menu.
 
-Note: I've now also written a [Raspberry Pi Instagram Slide and Video Show]() version that downloads and shows Instagram videos in addition to photos, so check that out as well.
+Note: I've now also written a [Raspberry Pi Instagram Slide and Video Show](https://github.com/tachyonlabs/raspberry_pi_slide_and_video_show) version that downloads and shows Instagram videos in addition to photos, so check that out as well.
 
 ## Getting the slideshow set up on your Raspberry Pi
 Follow these instructions to get the slideshow set up and working on your Raspberry Pi:
