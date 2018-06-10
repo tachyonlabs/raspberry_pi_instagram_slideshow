@@ -1,0 +1,14 @@
+# Misc testing stuff
+misc/
+
+# IFL photos and videos
+instagram_photos/
+
+# ini file
+instagram_slideshow.ini
+
+# compiled tkSimpleDialog.py
+tkSimpleDialog.pyc
+__pycache__/
+
+

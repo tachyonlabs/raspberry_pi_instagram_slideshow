@@ -1,12 +1,21 @@
 import requests
 import json
 import os
+import sys
 import random
-import ConfigParser
-import Tkinter as tk
-import ttk
-from PIL import ImageTk, Image
 from datetime import datetime
+from PIL import ImageTk, Image
+
+# For compatibility with both Python 2 and 3
+if sys.version_info[0] < 3:
+    import Tkinter as tk
+    import ttk
+    import ConfigParser
+else:
+    import tkinter as tk
+    import tkinter.ttk as ttk
+    import configparser as ConfigParser
+
 from tkSimpleDialog import Dialog
 # tkSimpleDialog.py is from http://effbot.org/tkinterbook/tkinter-dialog-windows.htm
 # Thanks to the author, Fredrik Lundh!
@@ -73,7 +82,7 @@ class InstagramSlideshow:
         # download any new photos, start slideshow
         self.download_any_new_instagram_photos()
         self.photos = self.get_photo_filenames()
-        print "Starting slideshow."
+        print("Starting slideshow.")
         self.show_photo()
 
     def create_menus(self):
@@ -143,14 +152,14 @@ class InstagramSlideshow:
             os.mkdir(self.LOCAL_PHOTO_DIRECTORY_PATH)
 
         # get URLs, captions, etc. on the 20 most recent Instagram photos
-        print ("Checking for any new Instagram photos at {} ...".format(datetime.now()))
+        print("Checking for any new Instagram photos at {} ...".format(datetime.now()))
         internet_connection = True
 
         try:
             json_data = json.loads(requests.get(self.MOST_RECENT_PHOTOS_URL).text)
         except:
             internet_connection = False
-            print "Unable to reach Instagram ... check your Internet connection. Showing stored photos."
+            print("Unable to reach Instagram ... check your Internet connection. Showing stored photos.")
 
         if internet_connection:
             new_photos_downloaded = False
@@ -163,18 +172,21 @@ class InstagramSlideshow:
                     if not os.path.isfile(self.LOCAL_PHOTO_DIRECTORY_PATH + photo_filename):
                         # save to disk any new photos that were not saved previously
                         new_photos_downloaded = True
-                        print ('Downloading and saving photo "{}"'.format(photo["caption"]["text"].encode("utf8")))
+                        if photo["caption"]:
+                            print('Downloading and saving photo "{}"'.format(photo["caption"]["text"].encode("utf8")))
+                        else:
+                            print('Downloading and saving photo "{}"'.format(photo_filename))
                         photo_file = requests.get(image_url).content
                         with open(self.LOCAL_PHOTO_DIRECTORY_PATH + photo_filename, 'wb') as handler:
                             handler.write(photo_file)
             except:
-                print "Instagram error:", json_data
+                print("Instagram error:", json_data)
 
             if new_photos_downloaded:
                 # update the list of jpg filenames in the Instagram Photos subdirectory
                 self.get_photo_filenames()
             else:
-                print "No new photos found."
+                print("No new photos found.")
 
         # check for new photos once an hour
         self.window.after(self.HOUR_IN_MICROSECONDS, self.download_any_new_instagram_photos)
@@ -187,7 +199,7 @@ class InstagramSlideshow:
             photo_filenames.sort()
 
         if not photo_filenames:
-            print "No stored photos found."
+            print("No stored photos found.")
 
         return photo_filenames
 
@@ -207,7 +219,7 @@ class InstagramSlideshow:
                 if image_aspect_ratio > self.ASPECT_RATIO:
                     new_height = image_height * self.WIDTH / image_width
                 else:
-                    new_width = image_width * self.HEIGHT / image_height
+                    new_width = image_width * self.HEIGHT // image_height
                 image = image.resize((new_width, new_height), Image.ANTIALIAS)
                 next_photo = ImageTk.PhotoImage(image)
 

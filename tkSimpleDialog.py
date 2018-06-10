@@ -1,8 +1,13 @@
 # tkSimpleDialog.py is from http://effbot.org/tkinterbook/tkinter-dialog-windows.htm
 # Thanks to Fredrik Lundh!
 
-from Tkinter import *
+import sys
 import os
+if sys.version_info[0] < 3:
+    from Tkinter import *
+else:
+    from tkinter import *
+
 
 class Dialog(Toplevel):
 
