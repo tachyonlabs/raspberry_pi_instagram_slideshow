@@ -168,7 +168,8 @@ class InstagramSlideshow:
             try:
                 for photo in json_data["data"]:
                     image_url = photo["images"]["standard_resolution"]["url"]
-                    photo_filename = image_url[image_url.rindex("/") + 1:]
+                    image_link = photo["link"]
+                    photo_filename = image_link.split('/')[4] + '.jpg'
                     if not os.path.isfile(self.LOCAL_PHOTO_DIRECTORY_PATH + photo_filename):
                         # save to disk any new photos that were not saved previously
                         new_photos_downloaded = True
