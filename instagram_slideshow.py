@@ -168,7 +168,11 @@ class InstagramSlideshow:
             try:
                 for photo in json_data["data"]:
                     image_url = photo["images"]["standard_resolution"]["url"]
-                    photo_filename = image_url[image_url.rindex("/") + 1:]
+                    # The URL will look like this ...
+                    # https://scontent.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/91944348_533445680909267_5495124442234212437_n.jpg?_nc_ht=scontent.cdninstagram.com&_nc_ohc=dpIjuIOBYTIAX8q5WiJ&oh=310b3910a2adb4ded46041e00d3c9707&oe=5EB8023F
+                    # ... so for the filename to save the photo to disk as, extract the part that looks like this ...
+                    # 91944348_533445680909267_5495124442234212437_n.jpg
+                    photo_filename = image_url[image_url.rindex("/") + 1:image_url.rindex("jpg") + 3]
                     if not os.path.isfile(self.LOCAL_PHOTO_DIRECTORY_PATH + photo_filename):
                         # save to disk any new photos that were not saved previously
                         new_photos_downloaded = True
